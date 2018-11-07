@@ -5,7 +5,8 @@ public enum Mark {
     DOT("."),
     COMA(","),
     COLON(":"),
-    SEMICOLON(";");
+    SEMICOLON(";"),
+    SPACE(" ");
 
 
     private final String mark;
