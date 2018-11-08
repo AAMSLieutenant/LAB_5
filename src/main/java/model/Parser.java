@@ -11,11 +11,21 @@ public class Parser {
     private String text;
     private ArrayList<Sentense> sentenses;
 
-    public Parser(){
-        text=new String();
+
+    public void mainMethod(){
+        Parser p=new Parser();
+        text=p.getText();
+        sentenses=p.parseSentenses(p.getText());
+        p.parseWords(sentenses);
+        p.countPersentage(sentenses);
     }
 
-    public String getText(){
+    public Parser(){
+        text=new String();
+        sentenses=new ArrayList<Sentense>();
+    }
+
+    private String getText(){
         try {
             FileInputStream fis = new FileInputStream("File.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
@@ -45,6 +55,7 @@ public class Parser {
         while(stk.hasMoreTokens()){
             s=stk.nextToken(currentParser);
 //            System.out.println("Clean string:"+s);
+            s=s.trim();
             Sentense sen=new Sentense(s);
 //            System.out.println("Sentense from object:"+sen.getSentense());
             arr.add(sen);
@@ -52,7 +63,7 @@ public class Parser {
         for(int i=0;i<arr.size();i++){
            System.out.println("Sentense "+i+" "+arr.get(i).getSentense());
         }
-        arr.remove(20);
+//        arr.remove(20);
         return arr;
     }
 
@@ -73,7 +84,7 @@ public class Parser {
             for(int j=0;j<sentenses.get(i).getWords().size();j++){
                 System.out.println(sentenses.get(i).getWords().get(j).getWord());
             }
-            System.out.println("---------------------------------");
+//            System.out.println("---------------------------------");
         }
     }
 
@@ -94,7 +105,7 @@ public class Parser {
         word.setVovels(vovels);
         double percent=vovels/length;
         word.setPercentage(percent);
-        System.out.println(percent);
+//        System.out.println(percent);
 
     }
 
@@ -106,7 +117,7 @@ public class Parser {
                 words.add(sarr.get(i).getWords().get(j));
             }
         }
-        System.out.println(words.size());
+//        System.out.println(words.size());
         for(int i=0;i<words.size();i++){
             count(words.get(i));
         }
@@ -144,4 +155,17 @@ public class Parser {
 //        System.out.println("Size of the map "+map.size());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Parser parser = (Parser) o;
+        return Objects.equals(text, parser.text) &&
+                Objects.equals(sentenses, parser.sentenses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(text, sentenses);
+    }
 }
