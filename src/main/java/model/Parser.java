@@ -4,10 +4,7 @@ package model;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Parser {
 
@@ -81,38 +78,70 @@ public class Parser {
     }
 
 
-    public double count(Word word){
+    public void count(Word word){
         String s=word.getWord();
         String container="aeiouyуеэоаыяиюіїєAEIOUYУЕЭОАЫЯИЮІЇЄ";
-        double all=word.getWord().length();
+        double length=word.getWord().length();
+        word.setLength(length);
         double vovels=0;
         for(int i=0;i<s.length();i++){
             if(container.contains(String.valueOf(s.charAt(i)))){
                 vovels++;
             }
         }
-        System.out.println(all);
-        System.out.println(vovels);
-        double percent=vovels/all;
+        //System.out.println(all);
+        //System.out.println(vovels);
+        word.setVovels(vovels);
+        double percent=vovels/length;
+        word.setPercentage(percent);
         System.out.println(percent);
-        return percent;
+
     }
 
 
     public void countPersentage(ArrayList<Sentense> sarr){
-        Map<Double,String> map=new HashMap<Double,String>();
-        System.out.println("--------------------");
+        ArrayList<Word> words=new ArrayList<Word>();
         for(int i=0;i<sarr.size();i++){
-            System.out.println("--------------------");
             for(int j=0;j<sarr.get(i).getWords().size();j++){
-                Word curWord=sarr.get(i).getWords().get(j);
-                map.put(count(curWord),curWord.getWord());
-                System.out.println(curWord.getWord());
+                words.add(sarr.get(i).getWords().get(j));
             }
         }
-        for(Map.Entry entry:map.entrySet()){
-            System.out.println(entry.getKey()+","+entry.getValue());
+        System.out.println(words.size());
+        for(int i=0;i<words.size();i++){
+            count(words.get(i));
         }
+
+        Collections.sort(words, new Comparator<Word>() {
+            public int compare(Word w1, Word w2) {
+                if((w1.getPercentage()>w2.getPercentage())){
+                    return 1;
+                }
+                if((w1.getPercentage()<w2.getPercentage())){
+                    return -1;
+                }
+                return 0;
+            }
+        });
+        for(int i=0;i<words.size();i++){
+            System.out.println(words.get(i).getWord());
+        }
+//        Map<Double,String> map=new TreeMap<Double,String>();
+//        System.out.println("--------------------");
+//        for(int i=0;i<sarr.size();i++){
+//            System.out.println("--------------------");
+//            System.out.println("Sentence number "+i);
+//            for(int j=0;j<sarr.get(i).getWords().size();j++){
+//                Word curWord=sarr.get(i).getWords().get(j);
+//                map.put(count(curWord),curWord.getWord());
+//                System.out.println("word number "+j);
+//                System.out.println(curWord.getWord());
+//            }
+//        }
+
+//        for(Map.Entry entry:map.entrySet()){
+//            System.out.println(entry.getKey()+","+entry.getValue());
+//        }
+//        System.out.println("Size of the map "+map.size());
     }
 
 }
